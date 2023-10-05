@@ -29,7 +29,6 @@ class HomeController extends Controller
         return $this->homeService->deleteSlider($id);
     }
 
-
     public function aboutSection()
     {
         return $this->homeService->aboutSection();
@@ -39,7 +38,6 @@ class HomeController extends Controller
     {
         return $this->homeService->aboutSaveOrUpdate($request);
     }
-
 
     public function achievementList()
     {
@@ -66,19 +64,16 @@ class HomeController extends Controller
         return $this->homeService->virtualSectionSaveOrUpdate($request);
     }
 
-
     public function productSectionSaveOrUpdate(Request $request)
     {
 
         return $this->homeService->productSectionSaveOrUpdate($request);
     }
 
-
     public function productSection()
     {
         return $this->homeService->productSection();
     }
-
 
     public function ourClientList()
     {
@@ -100,18 +95,15 @@ class HomeController extends Controller
         return $this->homeService->sustainabilitySaveOrUpdate($request);
     }
 
-
     public function sustainabilityFeatureList()
     {
         return $this->homeService->sustainabilityFeatureList();
     }
 
-
     public function sustainabilityFeatureSaveOrUpdate(Request $request)
     {
         return $this->homeService->sustainabilityFeatureSaveOrUpdate($request);
     }
-
 
     public function certificationSection()
     {

@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class NewsAndEvent extends Model
 {
     use HasFactory;
-
-    protected  $fillable = [
+    protected $fillable = [
         'user_id',
-        'name',
-        'slug',
+        'category_id',
+        'title',
+        'short_description',
+        'image',
+        'description',
         'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active' => 'boolean'
     ];
 }

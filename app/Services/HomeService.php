@@ -34,7 +34,7 @@ class HomeService
     public function saveOrUpdateSlider($request)
     {
         try {
-            $sliders = [
+            $slider = [
                 'short_title' => $request->short_title,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -49,7 +49,7 @@ class HomeService
             ]);
 
             if (empty($request->id)) {
-                $slider = HeroSlider::create($sliders);
+                $slider = HeroSlider::create($slider);
                 if ($request->hasFile('image')) {
                     $slider->image = $this->imageUpload($request, 'image', 'image');
                     $slider->save();
@@ -57,7 +57,7 @@ class HomeService
                 return $this->apiResponse([], 'Slider Saved Successfully', true, 200);
             } else {
                 $slider = HeroSlider::find($request->id);
-                $slider->update($sliders);
+                $slider->update($slider);
                 if ($request->hasFile('image')) {
                     $slider->image = $this->imageUpload($request, 'image', 'image', $slider->image);
                     $slider->save();

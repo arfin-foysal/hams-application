@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger("user_id")->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

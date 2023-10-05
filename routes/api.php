@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\Api\HomeController;
-
-
+use App\Http\Controllers\Api\NewsAndEventController;
+use App\Http\Controllers\Api\ProductController;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
@@ -31,8 +31,6 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 // Route::post('/auth/client-login', [AuthController::class, 'clientLogin']);
 // Route::post('/auth/client-register', [AuthController::class, 'createUser']);
-
-
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('admin')->group(function () {
@@ -58,8 +56,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('/delete-achievement/{id}', [HomeController::class, 'deleteAchievement']);
         Route::get('/virtually-section', [HomeController::class, 'virtualSection']);
         Route::post('/virtually-save-or-update', [HomeController::class, 'virtualSectionSaveOrUpdate']);
-        Route::get('/our-client-list', [HomeController::class, 'ourClientList']);
-        Route::post('/our-client-save-or-update', [HomeController::class, 'ourClientSaveOrUpdate']);
+        Route::get('/client-list', [HomeController::class, 'ourClientList']);
+        Route::post('/client-save-or-update', [HomeController::class, 'ourClientSaveOrUpdate']);
         Route::get('/sustainability-section', [HomeController::class, 'sustainabilitySection']);
         Route::post('/sustainability-save-or-update', [HomeController::class, 'sustainabilitySaveOrUpdate']);
         Route::get('/sustainability-feature-list', [HomeController::class, 'sustainabilityFeatureList']);
@@ -68,23 +66,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('certification-Section-update', [HomeController::class, 'certificationSectionUpdate']);
         Route::get('/certification-list', [HomeController::class, 'certificationList']);
         Route::post('/certification-save-or-update', [HomeController::class, 'certificationSaveOrUpdate']);
-
-
-
         //about us
-
         Route::get('/who-we-are-section', [AboutController::class, 'whoWeAreSection']);
         Route::post('/who-we-are-section-update', [AboutController::class, 'whoWeAreSectionUpdate']);
         Route::get('/process-section-feature-list', [AboutController::class, 'processSectionFeatureList']);
         Route::post('/process-section-feature-create-or-update', [AboutController::class, 'processSectionFeatureCreateOrUpdate']);
         Route::get('/journey-section', [AboutController::class, 'journeySection']);
         Route::post('/journey-section-update', [AboutController::class, 'journeySectionUpdate']);
-
         Route::get('/journey-section-timeline-list', [AboutController::class, 'journeySectionTimelineList']);
         Route::post('/journey-section-timeline-create-or-update', [AboutController::class, 'journeySectionTimelineCreateOrUpdate']);
         Route::get('/quality-section', [AboutController::class, 'qualitySection']);
         Route::post('/quality-section-update', [AboutController::class, 'qualitySectionUpdate']);
-
         Route::get('/quality-section-feature-list', [AboutController::class, 'qualitySectionFeatureList']);
         Route::post('/quality-section-feature-create-or-update', [AboutController::class, 'qualitySectionFeatureCreateOrUpdate']);
         Route::get('/client-section', [AboutController::class, 'clientSection']);
@@ -95,9 +87,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/elevating-section-feature-create-or-update', [AboutController::class, 'elevatingSectionFeatureCreateOrUpdate']);
         Route::get('customer-support-section', [AboutController::class, 'customerSupportSection']);
         Route::post('customer-support-section-update', [AboutController::class, 'customerSupportSectionUpdate']);
-
-
-
+        //product 
+        Route::get('/product-list', [ProductController::class, 'productList']);
+        Route::post('/product-save-or-update', [ProductController::class, 'saveOrUpdateProduct']);
+        //news And event
+        Route::get('/news-and-event-list', [NewsAndEventController::class, 'newsAndEventList']);
+        Route::post('/news-and-event-save-or-update', [NewsAndEventController::class, 'saveOrUpdateNewsAndEvent']);
+        Route::get('category-list', [NewsAndEventController::class, 'categoryList']);
+        Route::post('category-save-or-update', [NewsAndEventController::class, 'saveOrUpdateCategory']);
         Route::get('logout', [AuthController::class, 'logout']);
     });
 });
