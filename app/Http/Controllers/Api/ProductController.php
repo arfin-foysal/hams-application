@@ -14,6 +14,16 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
 
+    public function productCategory(Request $request)
+    {
+        return $this->productService->productCategory($request);
+    }
+
+    public function productCategorySaveOrUpdate(Request $request)
+    {
+        return $this->productService->productCategorySaveOrUpdate($request);
+    }
+
     public function productList()
     {
         return $this->productService->productList();
@@ -21,10 +31,17 @@ class ProductController extends Controller
 
     public function saveOrUpdateProduct(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-        ]);
         return $this->productService->saveOrUpdateProduct($request);
+    }
+
+    public function productByCategoryId(Request $request)
+    {
+        return $this->productService->productByCategoryId($request);
+    }
+
+    public function productDetails(Request $request)
+    {
+        return $this->productService->productDetails($request);
     }
 
 }

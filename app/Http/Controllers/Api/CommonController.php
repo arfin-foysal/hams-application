@@ -81,4 +81,9 @@ class CommonController extends Controller
     {
        return $this->commonService->saveOrUpdateCommonInfo($request);
     }
+
+    public function certificationList()
+    {
+       return $this->commonService->certificationList();
+    }
 }

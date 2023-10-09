@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Traits\HelperTrait;
+use App\Models\Certification;
 use App\Models\CommonInfo;
 use App\Models\MainMenu;
 use App\Models\MenuSection;
@@ -28,6 +29,7 @@ class CommonService
             $mainMenus = [
                 'name' => $request->name,
                 'link' => $request->link,
+                'description' => $request->description,
                 'meta_title' => $request->meta_title,
                 'meta_keyword' => $request->meta_keyword,
                 'meta_description' => $request->meta_description,
@@ -127,8 +129,7 @@ class CommonService
                 'sub_menu_id' => $request->sub_menu_id,
                 'title' => $request->title,
                 'description' => $request->description,
-                'image' => $request->image,
-                // 'is_active' => $request->is_active,
+                'is_active' => $request->is_active,
             ];
 
             $request->validate([
@@ -137,8 +138,8 @@ class CommonService
 
             if (empty($request->id)) {
 
-
                 $menuSection = MenuSection::where('sub_menu_id', $request->sub_menu_id)->first();
+                
                 if ($menuSection) {
                     return $this->apiResponse([], 'Menu Section Already Exist For This Sub Menu', false, 500);
                 }
@@ -147,15 +148,17 @@ class CommonService
                     $Section['image'] = $this->imageUpload($request, 'image', 'image');
                 }
                 $menuSection = MenuSection::create($Section);
+
                 return $this->apiResponse([], 'Menu Section Saved Successfully', true, 200);
             } else {
-
                 $menuSection = MenuSection::find($request->id);
                 if ($request->hasFile('image')) {
-                    $Section['image'] = $this->imageUpload($request, 'image', 'image', $menuSection->image);
+                    $menuSection->image = $this->imageUpload($request, 'image', 'image', $menuSection->image);
+                    $menuSection->save();
                 }
                 $menuSection->update($Section);
-                return $this->apiResponse([], 'Menu Section Updated Successfully', true, 200);
+             
+                return $this->apiResponse($menuSection, 'Menu Section Updated Successfully', true, 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -253,4 +256,20 @@ class CommonService
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
+
+
+    public function certificationList()
+    {
+        try {
+            $certifications = Certification::get();
+            return $this->apiResponse($certifications, 'Certification List Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
+
+
+
+
+
 }

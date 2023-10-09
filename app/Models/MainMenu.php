@@ -12,6 +12,7 @@ class MainMenu extends Model
     protected $fillable = [
         'name',
         'link',
+        'description',
         'meta_title',
         'meta_keyword',
         'meta_description',

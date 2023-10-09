@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('home_product_sections', function (Blueprint $table) {
+        Schema::create('slider_feature_sections', function (Blueprint $table) {
             $table->id();
-            $table->string('sort_title')->nullable();
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('title_one')->nullable();
+            $table->string('title_two')->nullable();
+            $table->string('title_three')->nullable();
+            $table->string('title_four')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('home_product_sections');
+        Schema::dropIfExists('slider_feature_sections');
     }
 };

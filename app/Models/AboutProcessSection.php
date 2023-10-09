@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AboutProcessSection extends Model
 {
     use HasFactory;
-    protected $table = 'about_process_section';
     protected $fillable = [
         'short_title',
         'title',

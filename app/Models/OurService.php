@@ -5,15 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HomeProductSection extends Model
+class OurService extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'sort_title',
         'title',
         'description',
+        'image',
+        'is_active',
     ];
 
-
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

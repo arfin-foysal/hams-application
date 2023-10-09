@@ -24,6 +24,16 @@ class HomeController extends Controller
         return $this->homeService->saveOrUpdateSlider($request);
     }
 
+    public function sliderSectionFeature()
+    {
+        return $this->homeService->sliderSectionFeature();
+    }
+
+    public function sliderSectionFeatureSaveOrUpdate(Request $request)
+    {
+        return $this->homeService->sliderSectionFeatureSaveOrUpdate($request);
+    }
+
     public function deleteSlider($id)
     {
         return $this->homeService->deleteSlider($id);
@@ -48,6 +58,8 @@ class HomeController extends Controller
     {
         return $this->homeService->achievementSaveOrUpdate($request);
     }
+
+
 
     public function achievementDelete($id)
     {
@@ -123,5 +135,27 @@ class HomeController extends Controller
     public function certificationSaveOrUpdate(Request $request)
     {
         return $this->homeService->certificationSaveOrUpdate($request);
+    }
+
+    public function ourServiceList()
+    {
+        return $this->homeService->ourServiceList();
+    }
+
+    public function ourServiceSaveOrUpdate(Request $request)
+    {
+        return $this->homeService->ourServiceSaveOrUpdate($request);
+    }
+
+    // client site api start
+
+    public function homePage()
+    {
+        return $this->homeService->homePage();
+    }
+
+    public function homeServiceBySubmenuId(Request $request)
+    {
+        return $this->homeService->homeServiceBySubmenuId($request);
     }
 }

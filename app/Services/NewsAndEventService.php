@@ -102,4 +102,74 @@ class NewsAndEventService
             return $this->apiResponse([], $th->getMessage(), 500);
         }
     }
+
+
+    public function newsAndEventPage($request)
+    {
+        try {
+
+            $category_id = $request->query('category_id');
+            $search = $request->query('search');
+
+            $newsAndEvent = NewsAndEvent::when($category_id, function ($query, $category_id) {
+                return $query->where('category_id', $category_id);
+            })->when($search, function ($query, $search) {
+                return $query->where('title', 'like', '%' . $search . '%');
+            })->get();
+            return $this->apiResponse($newsAndEvent, 'News And Event Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+
+    public function newsDetailsPage($request)
+    {
+        try {
+            $newsAndEvent = NewsAndEvent::find($request->id)->first();
+            return $this->apiResponse($newsAndEvent, 'News And Event Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function recentPost()
+    {
+        try {
+            $newsAndEvent = NewsAndEvent::orderBy('id', 'desc')->take(4)->get();
+            return $this->apiResponse($newsAndEvent, 'News And Event Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+
+
+    }
+
+
+    public function photoGalleryList()
+    {
+        try {
+            $newsAndEvent = NewsAndEvent::orderBy('id', 'desc')->take(4)->get();
+            return $this->apiResponse($newsAndEvent, 'News And Event Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function photoGalleryListPage ($request)
+    {
+        try {
+
+            $page = 0;
+            $limit = $request->limit;
+
+            $newsAndEvent = NewsAndEvent::orderBy('updated_at', 'desc')->paginate($limit, ['*'], 'page', $page);
+            return $this->apiResponse($newsAndEvent, 'News And Event Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+
+
+    }
+
 }

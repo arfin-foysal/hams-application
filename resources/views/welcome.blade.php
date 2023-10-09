@@ -21,7 +21,7 @@
 </head>
 
 <body class="antialiased">
-    <div class="text-center">
+    <div style=" text-align-center">
         <div>
             <h1>HAMS Application Backend</H1>
         </div>

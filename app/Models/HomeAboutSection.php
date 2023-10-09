@@ -15,6 +15,7 @@ class HomeAboutSection extends Model
         'featured_image',
         'short_description',
         'description',
+        'youtube_link',
         'button_text' ,
         'button_link' ,
         'start_count' ,

@@ -34,6 +34,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('admin')->group(function () {
+        Route::get('logout', [AuthController::class, 'logout']);
         Route::get('/main-menu-list', [CommonController::class, 'mainMenuList']);
         Route::post('/save-or-update-main-menu', [CommonController::class, 'saveOrUpdateMainMenu']);
         Route::delete('/delete-main-menu/{id}', [CommonController::class, 'deleteMainMenu']);
@@ -48,9 +49,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/common-info', [CommonController::class, 'commonInfo']);
         Route::Post('/save-or-update-slider', [HomeController::class, 'saveOrUpdateSlider']);
         Route::get('/slider-list', [HomeController::class, 'sliderList']);
+        Route::get('/slider-feature-section', [HomeController::class, 'sliderSectionFeature']);
+        Route::post('/slider-feature-save-or-update', [HomeController::class, 'sliderSectionFeatureSaveOrUpdate']);
+        Route::get('/our-service-list', [HomeController::class, 'ourServiceList']);
+        Route::post('/our-service-save-or-update', [HomeController::class, 'ourServiceSaveOrUpdate']);
         Route::delete('/delete-slider/{id}', [HomeController::class, 'deleteSlider']);
         Route::get('/about-section', [HomeController::class, 'aboutSection']);
         Route::post('about-save-or-update', [HomeController::class, 'aboutSaveOrUpdate']);
+        Route::get('/product-section', [HomeController::class, 'productSection']);
+        Route::post('/product-section-update', [HomeController::class, 'productSectionSaveOrUpdate']);
         Route::get('/achievement-list', [HomeController::class, 'achievementList']);
         Route::post('/achievement-save-or-update', [HomeController::class, 'achievementSaveOrUpdate']);
         Route::delete('/delete-achievement/{id}', [HomeController::class, 'deleteAchievement']);
@@ -69,6 +76,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //about us
         Route::get('/who-we-are-section', [AboutController::class, 'whoWeAreSection']);
         Route::post('/who-we-are-section-update', [AboutController::class, 'whoWeAreSectionUpdate']);
+        Route::get('/process-section', [AboutController::class, 'processSection']);
+        Route::post('/process-section-update', [AboutController::class, 'processSectionUpdate']);
         Route::get('/process-section-feature-list', [AboutController::class, 'processSectionFeatureList']);
         Route::post('/process-section-feature-create-or-update', [AboutController::class, 'processSectionFeatureCreateOrUpdate']);
         Route::get('/journey-section', [AboutController::class, 'journeySection']);
@@ -88,19 +97,33 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('customer-support-section', [AboutController::class, 'customerSupportSection']);
         Route::post('customer-support-section-update', [AboutController::class, 'customerSupportSectionUpdate']);
         //product 
+
+        Route::get('/product-category-list', [ProductController::class, 'productCategory']);
+        Route::post('/product-category-save-or-update', [ProductController::class, 'productCategorySaveOrUpdate']);
         Route::get('/product-list', [ProductController::class, 'productList']);
         Route::post('/product-save-or-update', [ProductController::class, 'saveOrUpdateProduct']);
+
         //news And event
         Route::get('/news-and-event-list', [NewsAndEventController::class, 'newsAndEventList']);
         Route::post('/news-and-event-save-or-update', [NewsAndEventController::class, 'saveOrUpdateNewsAndEvent']);
         Route::get('category-list', [NewsAndEventController::class, 'categoryList']);
         Route::post('category-save-or-update', [NewsAndEventController::class, 'saveOrUpdateCategory']);
-        Route::get('logout', [AuthController::class, 'logout']);
     });
 });
 
 Route::prefix('client')->group(function () {
     Route::get('/main-menu-list', [CommonController::class, 'mainMenuList']);
+    Route::get('/common-info', [CommonController::class, 'commonInfo']);
+    Route::get('home-page', [HomeController::class, 'homePage']);
+    Route::get('home-service-by-submenu-id/{id}', [HomeController::class, 'homeServiceBySubmenuId']);
+    Route::get('about-page', [AboutController::class, 'aboutPage']);
+    Route::get('product-by-client-id/{id}', [AboutController::class, 'productByClientId']);
+    Route::get('product-by-category-id/{id}', [ProductController::class, 'productByCategoryId']);
+    Route::get('product-details/{id}', [ProductController::class, 'productDetails']);
+    Route::get('certification-list', [CommonController::class, 'certificationList']);
+    Route::get('news-and-event-page', [NewsAndEventController::class, 'newsAndEventPage']);
+    Route::get('news-details/{id}', [NewsAndEventController::class, 'newsDetailsPage']);
+    Route::get('recent-post', [NewsAndEventController::class, 'recentPost']);
 });
 
 

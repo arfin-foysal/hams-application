@@ -32,6 +32,11 @@ class AboutController extends Controller
         return $this->aboutService->processSection();
     }
 
+    public function processSectionUpdate(Request $request)
+    {
+        return $this->aboutService->processSectionUpdate($request);
+    }
+
     public function processSectionFeatureList()
     {
 
@@ -86,47 +91,56 @@ class AboutController extends Controller
         return $this->aboutService->qualitySectionFeatureCreateOrUpdate($request);
     }
 
-    public function  clientSection ()
+    public function  clientSection()
     {
         return $this->aboutService->clientSection();
     }
 
-    public function  clientSectionUpdate (Request $request)
+    public function  clientSectionUpdate(Request $request)
     {
         return $this->aboutService->clientSectionUpdate($request);
     }
 
-    public function elevatingSection ()
+    public function elevatingSection()
     {
         return $this->aboutService->elevatingSection();
     }
 
-    public function elevatingSectionUpdate (Request $request)
+    public function elevatingSectionUpdate(Request $request)
     {
         return $this->aboutService->elevatingSectionUpdate($request);
     }
 
-    public function elevatingSectionFeatureList ()
+    public function elevatingSectionFeatureList()
     {
         return $this->aboutService->elevatingSectionFeatureList();
     }
 
-    public function elevatingSectionFeatureCreateOrUpdate (Request $request)
+    public function elevatingSectionFeatureCreateOrUpdate(Request $request)
     {
         return $this->aboutService->elevatingSectionFeatureCreateOrUpdate($request);
     }
 
-    public function customerSupportSection ()
+    public function customerSupportSection()
     {
         return $this->aboutService->customerSupportSection();
     }
 
-    public function customerSupportSectionUpdate (Request $request)
+    public function customerSupportSectionUpdate(Request $request)
     {
         return $this->aboutService->customerSupportSectionUpdate($request);
     }
 
 
+    // Client site api start
 
+    public function aboutPage()
+    {
+        return $this->aboutService->aboutPage();
+    }
 
+    public function productByClientId(Request $request)
+    {
+        return $this->aboutService->productByClientId($request);
+    }
 }

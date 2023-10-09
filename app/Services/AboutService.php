@@ -14,6 +14,8 @@ use App\Models\AboutProcessSection;
 use App\Models\AboutQualityFeature;
 use App\Models\AboutQualitySection;
 use App\Models\AboutWhoWeAreSection;
+use App\Models\OurClient;
+use App\Models\Product;
 
 class AboutService
 {
@@ -46,6 +48,7 @@ class AboutService
 
     public function processSection()
     {
+
         $process = AboutProcessSection::first();
         return $this->apiResponse($process, 'success', true, 200);
     }
@@ -225,14 +228,14 @@ class AboutService
 
     public function clientSection()
     {
-        $client = AboutQualitySection::first();
+        $client = AboutClientSection::first();
         return $this->apiResponse($client, 'success', true, 200);
     }
 
     public function clientSectionUpdate($request)
     {
         $client = AboutClientSection::first();
-        $client->create([
+        $client->update([
             'short_title' => $request->short_title,
             'title' => $request->title,
             'description' => $request->description,
@@ -261,26 +264,24 @@ class AboutService
 
     public function elevatingSectionFeatureList()
     {
-        $elevating = AboutElevationFeature::where('about_elevation_section_id', 1)->get();
+        $elevating = AboutElevationFeature::get();
         return $this->apiResponse($elevating, 'success', true, 200);
     }
-
 
     public function elevatingSectionFeatureCreateOrUpdate($request)
     {
         try {
+            $request->validate([
+                'title' => 'required',
+            ]);
 
             $elevatingSec = [
-                'about_elevation_section_id' => $request->about_elevation_section_id,
+                'about_elevation_section_id' => 1,
                 'title' => $request->title,
                 'description' => $request->description,
                 'year' => $request->year,
                 'is_active' => $request->is_active,
             ];
-
-            $request->validate([
-                'title' => 'required',
-            ]);
 
             if (empty($request->id)) {
                 $elevating = AboutElevationFeature::create($elevatingSec);
@@ -315,12 +316,68 @@ class AboutService
 
     public function customerSupportSectionUpdate($request)
     {
-        $customerSupport = AboutClientSection::first();
+        $customerSupport = AboutCustomer::first();
         $customerSupport->update([
             'short_title' => $request->short_title,
             'title' => $request->title,
             'description' => $request->description,
         ]);
         return $this->apiResponse([], 'update successfully', true, 200);
+    }
+
+    //client site api start
+
+    public function aboutPage()
+    {
+        $about = [
+            'who_we_are' => AboutWhoWeAreSection::select('short_title', 'title', 'description', 'image')->first(),
+            'process' => AboutProcessSection::select('short_title', 'title', 'description')->first(),
+            'process_feature' => AboutProcessFeature::where('about_process_section_id', 1)->select('title', 'description', 'image')
+                ->get(),
+            'journey' => AboutJourneySection::select(
+                'short_title',
+                'title',
+                'description'
+            )->first(),
+            'journey_timeline' => AboutJourneyTimeline::where('about_journey_section_id', 1)->select('title', 'description', 'year')
+                ->get(),
+            'quality' => AboutQualitySection::select(
+                'short_title',
+                'title',
+                'description'
+            )->first(),
+            'quality_feature' => AboutQualityFeature::where('about_quality_section_id', 1)
+                ->select('title', 'description', 'icon')
+                ->get(),
+            'client' => AboutClientSection::select(
+                'short_title',
+                'title',
+                'description'
+            )->first(),
+            'clientList' => OurClient::select('id', 'title', 'logo', 'name', 'link',)->get(),
+            'elevating' => AboutElevationSection::select(
+                'short_title',
+                'title',
+                'description'
+            )->first(),
+            'elevating_feature' => AboutElevationFeature::where('about_elevation_section_id', 1)
+                ->select('title', 'description', 'icon')
+                ->get(),
+            'customer_support' => AboutCustomer::select('short_title', 'title', 'description')->first()
+        ];
+
+        return $this->apiResponse($about, 'success', true, 200);
+    }
+
+
+    public function productByClientId($request)
+    {
+        $id = $request->id ? $request->id : 0;
+        $product = Product::where('client_id', $id)
+            ->select('id', 'title', 'image')
+            ->orderBy('id', 'desc')
+            ->take(3)
+            ->get();
+        return $this->apiResponse($product, 'success', true, 200);
     }
 }

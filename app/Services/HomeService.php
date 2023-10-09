@@ -11,7 +11,12 @@ use App\Models\HomeCertification;
 use App\Models\HomeProductSection;
 use App\Models\HomeSustainability;
 use App\Models\HomeSustainabilityFeature;
+use App\Models\MenuSection;
 use App\Models\OurClient;
+use App\Models\OurService;
+use App\Models\Product;
+use App\Models\SliderFeatureSection;
+use App\Models\SubMenu;
 use App\Models\VirtuallySection;
 
 
@@ -30,11 +35,10 @@ class HomeService
         }
     }
 
-
     public function saveOrUpdateSlider($request)
     {
         try {
-            $slider = [
+            $sliders = [
                 'short_title' => $request->short_title,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -49,7 +53,7 @@ class HomeService
             ]);
 
             if (empty($request->id)) {
-                $slider = HeroSlider::create($slider);
+                $slider = HeroSlider::create($sliders);
                 if ($request->hasFile('image')) {
                     $slider->image = $this->imageUpload($request, 'image', 'image');
                     $slider->save();
@@ -57,12 +61,55 @@ class HomeService
                 return $this->apiResponse([], 'Slider Saved Successfully', true, 200);
             } else {
                 $slider = HeroSlider::find($request->id);
-                $slider->update($slider);
+                $slider->update($sliders);
                 if ($request->hasFile('image')) {
                     $slider->image = $this->imageUpload($request, 'image', 'image', $slider->image);
                     $slider->save();
                 }
                 return $this->apiResponse([], 'Slider Updated Successfully', true, 200);
+            }
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function sliderSectionFeature()
+    {
+        $slider = SliderFeatureSection::first();
+        return $this->apiResponse($slider, 'Slider Feature List Get Successfully', true, 200);
+    }
+
+    public function sliderSectionFeatureSaveOrUpdate($request)
+    {
+        try {
+            $request->validate([
+                'title_one' => 'required',
+            ]);
+
+            $slider = [
+                'logo' => $request->logo,
+                'title_one' => $request->title_one,
+                'title_two' => $request->title_two,
+                'title_three' => $request->title_three,
+                'title_four' => $request->title_four,
+                'is_active' => $request->is_active,
+            ];
+
+            if (empty($request->id)) {
+                $slider = SliderFeatureSection::create($slider);
+                if ($request->hasFile('logo')) {
+                    $slider->logo = $this->imageUpload($request, 'logo', 'image');
+                    $slider->save();
+                }
+                return $this->apiResponse([], 'Slider Feature Saved Successfully', true, 200);
+            } else {
+                $slider = SliderFeatureSection::find($request->id);
+                $slider->update($slider);
+                if ($request->hasFile('logo')) {
+                    $slider->logo = $this->imageUpload($request, 'logo', 'image', $slider->logo);
+                    $slider->save();
+                }
+                return $this->apiResponse([], 'Slider Feature Updated Successfully', true, 200);
             }
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), 500);
@@ -104,6 +151,7 @@ class HomeService
                 'title' => $request->title,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
+                'youtube_link' => $request->youtube_link,
                 'button_text' => $request->button_text,
                 'button_link' => $request->button_link,
                 'start_count' => $request->start_count,
@@ -132,6 +180,46 @@ class HomeService
                     $about->save();
                 }
                 return $this->apiResponse($about, 'About Section Updated Successfully', true, 200);
+            }
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function ourServiceList()
+    {
+        $service = OurService::get();
+        return $this->apiResponse($service, 'Our Service List Get Successfully', true, 200);
+    }
+
+    public function ourServiceSaveOrUpdate($request)
+    {
+        try {
+            $services = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'is_active' => $request->is_active,
+            ];
+
+            $request->validate([
+                'title' => 'required',
+            ]);
+
+            if (empty($request->id)) {
+                $service = OurService::create($services);
+                if ($request->hasFile('image')) {
+                    $service->image = $this->imageUpload($request, 'image', 'image');
+                    $service->save();
+                }
+                return $this->apiResponse($service, 'Our Service Saved Successfully', true, 200);
+            } else {
+                $service = OurService::find($request->id);
+                $service->update($services);
+                if ($request->hasFile('image')) {
+                    $service->image = $this->imageUpload($request, 'image', 'image', $service->image);
+                    $service->save();
+                }
+                return $this->apiResponse($service, 'Our Service Updated Successfully', true, 200);
             }
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), 500);
@@ -251,32 +339,19 @@ class HomeService
     {
 
         try {
+
+            $request->validate([
+                'title' => 'required',
+            ]);
             $product = [
                 'sort_title' => $request->sort_title,
                 'title' => $request->title,
                 'description' => $request->description,
             ];
-            $request->validate([
-                'title' => 'required',
-            ]);
-            if (empty($request->id)) {
 
-                $pSection = HomeProductSection::create($product);
-                if ($request->hasFile('bg_image')) {
-                    $pSection->bg_image = $this->imageUpload($request, 'bg_image', 'image');
-                    $pSection->save();
-                }
-                return $this->apiResponse($pSection, ' Section Create Successfully', true, 200);
-            } else {
-
-                $pSection = HomeProductSection::find($request->id);
-                $pSection->update($product);
-                if ($request->hasFile('bg_image')) {
-                    $pSection->bg_image = $this->imageUpload($request, 'bg_image', 'image', $pSection->bg_image);
-                    $pSection->save();
-                }
-                return $this->apiResponse($pSection, ' Section Updated Successfully', true, 200);
-            }
+            $pSection = HomeProductSection::first();
+            $pSection->update($product);
+            return $this->apiResponse($pSection, ' Section Updated Successfully', true, 200);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->apiResponse([], $th->getMessage(), 500);
@@ -513,5 +588,40 @@ class HomeService
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), 500);
         }
+    }
+
+
+    public function homePage()
+    {
+        try {
+            $homePage = [
+                'slider' => HeroSlider::select('id', 'short_title', 'title', 'description', 'button_text', 'button_link', 'image')->get(),
+                'sliderFeature' => SliderFeatureSection::select('id', 'title_one', 'title_two', 'title_three', 'title_four', 'logo')->first(),
+                'about' => HomeAboutSection::select('id', 'short_title', 'title', 'short_description', 'description', 'button_text', 'button_link', 'featured_image', 'start_count', 'end_count', 'name')->first(),
+                'ourService' => OurService::select('id', 'title', 'description', 'image')->get(), // 'image
+                'achievement' => CompanyAchievement::select('id', 'title', 'count_start', 'count_end', 'link', 'icon')->get(),
+                'subMenuList' => SubMenu::where('menu_id', 7)->select('id', 'menu_id', 'name', 'description', 'link',)->get(),
+                'virtually' => VirtuallySection::select('id', 'sort_title', 'title', 'description', 'button_text', 'link', 'bg_image')->first(),
+                'product' => HomeProductSection::select('id', 'sort_title', 'title', 'description')->first(),
+                'productList' => Product::select('id', 'client_id', 'short_title', 'title', 'short_description', 'image')->take(6)->get(),
+                'ourClient' => OurClient::select('id', 'title', 'name', 'link', 'logo')->get(),
+                'sustainability' => HomeSustainability::select('id', 'title', 'description', 'button_text', 'button_link')->first(),
+                'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count', 'icon')->get(),
+                'certification' => HomeCertification::select('id', 'sort_title', 'title', 'description', 'button_text', 'button_link')->first(),
+                'certificationList' => Certification::select('id', 'certification_category_id', 'sort_title', 'title', 'description', 'button_text', 'button_link', 'image', 'certificate_img')->take(6)->get(),
+            ];
+            return $this->apiResponse($homePage, 'Home Page Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+
+    public function homeServiceBySubmenuId($request)
+    {
+        $id =  $request->id;
+        $section = MenuSection::where('menu_id', 7)
+            ->where('sub_menu_id', $id)->select('id', 'menu_id', 'sub_menu_id', 'title', 'description', 'image')->first();
+        return $this->apiResponse($section, 'Home Service Get Successfully', true, 200);
     }
 }

@@ -15,13 +15,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('home_product_section_id')->nullable();
             $table->bigInteger('client_id')->nullable();
-            $table->string('featured_image')->nullable();
+            $table->bigInteger('product_category_id')->nullable();
             $table->string('image')->nullable();
-            $table->string('sort_title')->nullable();
+            $table->string('short_title')->nullable();
             $table->string('title')->nullable();
-            $table->string('sort_description')->nullable();
+            $table->string('short_description')->nullable();
             $table->dateTime('delivery_date')->nullable();
             $table->longText('description')->nullable();
             $table->string('facebook_link')->nullable();
