@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Log;
 //auth and open api
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-// Route::post('/auth/client-login', [AuthController::class, 'clientLogin']);
+Route::post('/auth/client-login', [AuthController::class, 'clientLogin']);
 // Route::post('/auth/client-register', [AuthController::class, 'createUser']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('certification-Section-update', [HomeController::class, 'certificationSectionUpdate']);
         Route::get('/certification-list', [HomeController::class, 'certificationList']);
         Route::post('/certification-save-or-update', [HomeController::class, 'certificationSaveOrUpdate']);
+       
         //about us
         Route::get('/who-we-are-section', [AboutController::class, 'whoWeAreSection']);
         Route::post('/who-we-are-section-update', [AboutController::class, 'whoWeAreSectionUpdate']);
@@ -118,23 +119,20 @@ Route::prefix('client')->group(function () {
     Route::get('home-service-by-submenu-id/{id}', [HomeController::class, 'homeServiceBySubmenuId']);
     Route::get('about-page', [AboutController::class, 'aboutPage']);
     Route::get('product-by-client-id/{id}', [AboutController::class, 'productByClientId']);
+    Route::get('product-category-list', [ProductController::class, 'productCategory']);
     Route::get('product-by-category-id/{id}', [ProductController::class, 'productByCategoryId']);
     Route::get('product-details/{id}', [ProductController::class, 'productDetails']);
     Route::get('certification-list', [CommonController::class, 'certificationList']);
     Route::get('news-and-event-page', [NewsAndEventController::class, 'newsAndEventPage']);
     Route::get('news-details/{id}', [NewsAndEventController::class, 'newsDetailsPage']);
     Route::get('recent-post', [NewsAndEventController::class, 'recentPost']);
+    Route::get('section-and-submenu-by-menu-id/{id}',[CommonController::class,'sectionAndSubMenuByMenuId']);
+    Route::post('subscription',[CommonController::class,'subscription']);
 });
-
-
 
 // test route
 
 Route::any('/test', function (Request $request) {
-
-
-
-
     return response()->json([
         'status' => true,
         'message' => 'This is test route',

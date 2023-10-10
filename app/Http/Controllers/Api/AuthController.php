@@ -27,6 +27,11 @@ class AuthController extends Controller
 
     }
 
+    public function clientLogin(Request $request)
+    {
+        return $this->authService->clientLogin($request);
+    }
+
     public function passwordChange(Request $request)
     {
         return $this->authService->passwordChange($request);

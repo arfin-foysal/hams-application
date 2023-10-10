@@ -86,7 +86,7 @@ class HomeService
                 'title_one' => 'required',
             ]);
 
-            $slider = [
+            $sliders = [
                 'logo' => $request->logo,
                 'title_one' => $request->title_one,
                 'title_two' => $request->title_two,
@@ -96,7 +96,7 @@ class HomeService
             ];
 
             if (empty($request->id)) {
-                $slider = SliderFeatureSection::create($slider);
+                $slider = SliderFeatureSection::create($sliders);
                 if ($request->hasFile('logo')) {
                     $slider->logo = $this->imageUpload($request, 'logo', 'image');
                     $slider->save();
@@ -104,7 +104,7 @@ class HomeService
                 return $this->apiResponse([], 'Slider Feature Saved Successfully', true, 200);
             } else {
                 $slider = SliderFeatureSection::find($request->id);
-                $slider->update($slider);
+                $slider->update($sliders);
                 if ($request->hasFile('logo')) {
                     $slider->logo = $this->imageUpload($request, 'logo', 'image', $slider->logo);
                     $slider->save();
@@ -240,7 +240,7 @@ class HomeService
     public function achievementSaveOrUpdate($request)
     {
         try {
-            $achieve = [
+            $achieves = [
                 'title' => $request->title,
                 'count_start' => $request->count_start,
                 'count_end' => $request->count_end,
@@ -253,7 +253,7 @@ class HomeService
             ]);
 
             if (empty($request->id)) {
-                $achievement = CompanyAchievement::create($achieve);
+                $achievement = CompanyAchievement::create($achieves);
                 if ($request->hasFile('icon')) {
                     $achievement->icon = $this->imageUpload($request, 'icon', 'icon');
                     $achievement->save();
@@ -261,7 +261,7 @@ class HomeService
                 return $this->apiResponse($achievement, 'Achievement Saved Successfully', true, 200);
             } else {
                 $achievement = CompanyAchievement::find($request->id);
-                $achievement->update($achieve);
+                $achievement->update($achieves);
                 if ($request->hasFile('icon')) {
                     $achievement->icon = $this->imageUpload($request, 'icon', 'icon', $achievement->icon);
                     $achievement->save();

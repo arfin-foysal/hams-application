@@ -86,4 +86,14 @@ class CommonController extends Controller
     {
        return $this->commonService->certificationList();
     }
+
+    public function sectionAndSubMenuByMenuId($id)
+    {
+       return $this->commonService->sectionAndSubMenuByMenuId($id);
+    }
+
+    public function subscription(Request $request)
+    {
+       return $this->commonService->subscription($request);
+    }
 }

@@ -8,7 +8,7 @@ use App\Models\CommonInfo;
 use App\Models\MainMenu;
 use App\Models\MenuSection;
 use App\Models\SubMenu;
-
+use App\Models\Subscription;
 
 class CommonService
 {
@@ -40,7 +40,7 @@ class CommonService
             ]);
             if (empty($request->id)) {
                 $mainMenu = MainMenu::create($mainMenus);
- 
+
                 return $this->apiResponse([], 'Main Menu Saved Successfully', true, 200);
             } else {
                 $mainMenu = MainMenu::find($request->id);
@@ -53,7 +53,7 @@ class CommonService
     }
 
 
-    public function subMenuCreateOrUpdate( $request)
+    public function subMenuCreateOrUpdate($request)
     {
         try {
             $subMenus = [
@@ -80,7 +80,7 @@ class CommonService
         }
     }
 
-    public function subMenuByMenu( $request)
+    public function subMenuByMenu($request)
     {
         try {
             $menu_id = $request->id ? $request->id : 0;
@@ -92,7 +92,7 @@ class CommonService
     }
 
 
-    public function subMenuList( $request, $id)
+    public function subMenuList($request, $id)
     {
         try {
             $subMenus = SubMenu::where('menu_id', $id)->get();
@@ -121,7 +121,7 @@ class CommonService
     }
 
 
-    public function saveOrUpdateMenuSection( $request)
+    public function saveOrUpdateMenuSection($request)
     {
         try {
             $Section = [
@@ -139,7 +139,7 @@ class CommonService
             if (empty($request->id)) {
 
                 $menuSection = MenuSection::where('sub_menu_id', $request->sub_menu_id)->first();
-                
+
                 if ($menuSection) {
                     return $this->apiResponse([], 'Menu Section Already Exist For This Sub Menu', false, 500);
                 }
@@ -157,7 +157,7 @@ class CommonService
                     $menuSection->save();
                 }
                 $menuSection->update($Section);
-             
+
                 return $this->apiResponse($menuSection, 'Menu Section Updated Successfully', true, 200);
             }
         } catch (\Throwable $th) {
@@ -166,12 +166,12 @@ class CommonService
         }
     }
 
-    public function menuSectionList( $request,$id)
+    public function menuSectionList($request, $id)
     {
         try {
             $sub_menu_id = $id;
             $menuSections = MenuSection::where('sub_menu_id', $sub_menu_id)
-            ->get();
+                ->get();
             return $this->apiResponse($menuSections, 'Menu Section List Get Successfully', true, 200);
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), false, 500);
@@ -217,11 +217,11 @@ class CommonService
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
-    
-    public function saveOrUpdateCommonInfo( $request)
+
+    public function saveOrUpdateCommonInfo($request)
     {
         try {
-        
+
 
             if (empty($request->id)) {
                 $info = $request->all();
@@ -268,8 +268,34 @@ class CommonService
         }
     }
 
+    public function sectionAndSubMenuByMenuId($id)
+    {
+        try {
+            $menuSections = MenuSection::where('menu_id', $id)->get();
+            $subMenus = SubMenu::where('menu_id', $id)->get();
+            return $this->apiResponse(['menuSections' => $menuSections, 'subMenus' => $subMenus], 'Menu Section And Sub Menu List Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
 
-
-
-
+    public function subscription($request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
+            $subscription = [
+                'email' => $request->email,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'remark' => $request->remark,
+            ];
+            $subscription = Subscription::create($subscription);
+            return $this->apiResponse([], 'Subscription Saved Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
 }
